@@ -88,9 +88,12 @@ def read_all_company(data):
 
 def search_company(data):
     """Search Company"""
-    cname_result = db.session.query(Company).with_entities(Company.cname, Company.address, Company.keyword).filter(Company.cname.like('%' + data['searchData'] + '%')).all()
-    address_result = db.session.query(Company).with_entities(Company.cname, Company.address, Company.keyword).filter(Company.address.like('%' + data['searchData'] + '%')).all()
-    keyword_result = db.session.query(Company).with_entities(Company.cname, Company.address, Company.keyword).filter(Company.keyword.like('%' + data['searchData'] + '%')).all()
+    cname_result = db.session.query(Company).with_entities(Company.cname,
+        Company.address, Company.keyword,Company.form,Company.logo_url).filter(Company.cname.like('%' + data['body'].get('searchData') + '%')).all()
+    address_result = db.session.query(Company).with_entities(Company.cname,
+        Company.address, Company.keyword,Company.form,Company.logo_url).filter(Company.address.like('%' + data['body'].get('searchData') + '%')).all()
+    keyword_result = db.session.query(Company).with_entities(Company.cname,
+        Company.address, Company.keyword,Company.form,Company.logo_url).filter(Company.keyword.like('%' + data['body'].get('searchData') + '%')).all()
 
     if not cname_result:
         cname_result = ""
@@ -110,8 +113,10 @@ def search_company(data):
             temp['cname'] = data[0]
             temp['address'] = data[1]
             temp['keyword'] = data[2]
-            result['cname_result' + str(i)] = temp
-            i+=1
+            temp['form'] = data[3]
+            temp['logo_url'] = data[4]
+            result['keyword_result' + str(i)] = temp
+            i += 1
 
     if address_result != "":
         i = 0
@@ -120,7 +125,9 @@ def search_company(data):
             temp['cname'] = data[0]
             temp['address'] = data[1]
             temp['keyword'] = data[2]
-            result['address_result' + str(i)] = temp
+            temp['form'] = data[3]
+            temp['logo_url'] = data[4]
+            result['keyword_result' + str(i)] = temp
             i += 1
 
     if keyword_result != "":
@@ -130,6 +137,8 @@ def search_company(data):
             temp['cname'] = data[0]
             temp['address'] = data[1]
             temp['keyword'] = data[2]
+            temp['form'] = data[3]
+            temp['logo_url'] = data[4]
             result['keyword_result' + str(i)] = temp
             i += 1
 
